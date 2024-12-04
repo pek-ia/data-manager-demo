@@ -1,3 +1,5 @@
+package dao;
+
 import model.Dealership;
 
 import javax.sql.DataSource;
@@ -5,16 +7,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DealershipDAO {
+public class DealershipDAOMysqlImpl implements DealershipDAO {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
-    public DealershipDAO(DataSource dataSource) {
+    public DealershipDAOMysqlImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    Dealership findDealershipById(int id){
+    @Override
+    public Dealership findDealershipById(int id){
         String name = "";
         String phone = "";
         String address = "";
@@ -40,5 +45,14 @@ public class DealershipDAO {
 
         return new Dealership(id, name, phone, address);
 
+    }
+
+    @Override
+    public List<Dealership> findAllDealerships() {
+        List<Dealership> dealerships = new ArrayList<>();
+
+
+
+        return dealerships;
     }
 }

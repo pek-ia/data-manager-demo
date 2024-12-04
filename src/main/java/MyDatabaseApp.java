@@ -1,3 +1,4 @@
+import dao.DealershipDAOMysqlImpl;
 import model.Dealership;
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -34,7 +35,7 @@ public class MyDatabaseApp {
         scanner.nextLine();
 
 
-        DealershipDAO dealershipDAO = new DealershipDAO(dataSource);
+        DealershipDAOMysqlImpl dealershipDAO = new DealershipDAOMysqlImpl(dataSource);
 
         Dealership d = dealershipDAO.findDealershipById(dealershipId);
 
