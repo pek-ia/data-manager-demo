@@ -4,11 +4,17 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import static java.lang.System.exit;
+
 public class MyDatabaseApp {
     public static void main(String[] args) {
 
         String username = "";
         String password = "";
+        if (args.length < 2){
+            System.out.println("Please provide --username=? and --password=?");
+            exit(1);
+        }
         for (String s: args){
             String[] parts = s.split("=");
             if (parts[0].equalsIgnoreCase("--username"))
@@ -17,15 +23,10 @@ public class MyDatabaseApp {
                 password = parts[1];
             System.out.println(s);
         }
-        System.out.println("password = " + password);
-        System.out.println("username = " + username);
 
         String url = "jdbc:mysql://localhost:3306/dealership";
 
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(url);
-        dataSource.setPassword(password);
-        dataSource.setUsername(username);
+        BasicDataSource dataSource = initializeDataSource(url, password, username);
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the integer dealership id: ");
@@ -45,20 +46,20 @@ public class MyDatabaseApp {
                    address = %s
                 """, d.getId(), d.getName(), d.getPhone(), d.getAddress());
 
-
-
-
-
-
-
-
-
-
         try {
             dataSource.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private static BasicDataSource initializeDataSource(String url, String password, String username) {
+        BasicDataSource dataSource;
+        dataSource = new BasicDataSource();
+        dataSource.setUrl(url);
+        dataSource.setPassword(password);
+        dataSource.setUsername(username);
+        return dataSource;
     }
 }
