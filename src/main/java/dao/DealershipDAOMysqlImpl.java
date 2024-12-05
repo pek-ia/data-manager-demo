@@ -86,6 +86,26 @@ public class DealershipDAOMysqlImpl implements DealershipDAO {
 
     @Override
     public List<Vehicle> findVehiclesByPriceRange(double minPrice, double maxPrice) {
-        return List.of();
+        List<Vehicle> vehicles = new ArrayList<>();
+
+        String query = """
+                SELECT * 
+                FROM vehicles
+                WHERE price BETWEEN ? AND ?
+                """;
+
+        try(Connection c = dataSource.getConnection()){
+            PreparedStatement ps = c.prepareStatement(query);
+            ps.setDouble(1, minPrice);
+            ps.setDouble(2, maxPrice);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                vehicles.add(new Vehicle());
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return vehicles;
     }
 }
