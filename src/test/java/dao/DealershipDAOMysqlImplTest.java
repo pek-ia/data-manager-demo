@@ -21,6 +21,15 @@ class DealershipDAOMysqlImplTest {
         ds.setUrl("jdbc:mysql://localhost:3306/dealership");
     }
 
+    @AfterAll
+    static void teardown(){
+        try {
+            ds.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @org.junit.jupiter.api.Test
     void test_findVehiclesByDealership(){
         // Arrange
@@ -31,15 +40,10 @@ class DealershipDAOMysqlImplTest {
         // Assert
         assertEquals( expectedNumVehiclesInTestDB, results.size());
 
-        try {
-            ds.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Test
-    void findVehiclesByPriceRange() {
+    void test_findVehiclesByPriceRange() {
         // Arrange
         DealershipDAOMysqlImpl dd = new DealershipDAOMysqlImpl(ds);
         double minPrice = 10000.;
@@ -51,10 +55,5 @@ class DealershipDAOMysqlImplTest {
         // Assert
         assertEquals( expectedNumVehiclesInTestDB, results.size());
 
-        try {
-            ds.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
