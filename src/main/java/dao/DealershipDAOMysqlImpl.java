@@ -28,7 +28,7 @@ public class DealershipDAOMysqlImpl implements DealershipDAO {
             PreparedStatement statement = connection.prepareStatement("""
                     SELECT * 
                     FROM dealerships 
-                    WHERE id = ?;
+                    WHERE dealership_id = ?;
                     """);
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
@@ -54,5 +54,38 @@ public class DealershipDAOMysqlImpl implements DealershipDAO {
 
 
         return dealerships;
+    }
+
+    @Override
+    public List<Vehicle> findVehiclesByDealership(int id) {
+        List<Vehicle> vehicles = new ArrayList<>();
+
+        String query = """
+                SELECT * 
+                FROM vehicles
+                JOIN Inventory ON vehicles.vin = Inventory.vin 
+                WHERE dealership_id = ? 
+                """;
+
+        try(Connection c = dataSource.getConnection()){
+            PreparedStatement ps = c.prepareStatement(query);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                vehicles.add(new Vehicle());
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+
+        return vehicles;
+    }
+
+    @Override
+    public List<Vehicle> findVehiclesByPriceRange(double minPrice, double maxPrice) {
+        return List.of();
     }
 }
